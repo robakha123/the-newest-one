@@ -8,14 +8,6 @@ from request import UserData
 def say_hello():
     return {"message": "Hello, Roba !"}
 
-@app.post("/user/", status_code=status.HTTP_201_CREATED)
-def create_user_simple(user: UserData):
-    if user.username in DB_USERS:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already exists"
-        )
-    DB_USERS[user.username] = user
-    return user.dict()
 
 @app.get("/user/{user_id}")
 def read_user_simple(user_id: int):
@@ -68,15 +60,12 @@ def login_user(login_data: UserData):
 
 @app.post("/user/", status_code=status.HTTP_201_CREATED)
 def create_user_simple(user: UserData):
-
     if user.username in DB_USERS:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username already exists"
         )
-
     DB_USERS[user.username] = user
-
     return {
         "message": "User registered successfully",
         "user_data": user.dict()
